@@ -1,0 +1,125 @@
+---
+title: "Final Project"
+format: html
+editor: visual
+---
+
+```{r}
+install.packages(c("tidycensus", "sf", "ggplot2", "viridis"), repos = "https://cran.rstudio.com/")
+
+options(repos = "https://cran.rstudio.com/")
+
+install.packages("tidycensus")
+install.packages("sf")
+install.packages("ggplot2")
+install.packages("viridis")
+library(tidycensus)
+library(sf)
+library(ggplot2)
+library(viridis)
+```
+
+```{r}
+baltimore_income <- get_acs(geography = "tract",
+                            variables = "B19013_001",
+                            state = "MD",
+                            county = "Baltimore city",
+                            geometry = TRUE,
+                            survey = "acs5",
+                            year = 2019)
+
+baltimore_income_sf <- st_as_sf(baltimore_income)
+
+ggplot() +
+  geom_sf(data = baltimore_income_sf, aes(fill = estimate)) +
+  scale_fill_viridis_c(option = "inferno", direction = -1) +
+  labs(title = "Median Household Income in Baltimore, MD",
+       fill = "Median Household Income",
+       caption = "Source: U.S. Census Bureau",
+       x = "Longitude",
+       y = "Latitude") +
+  theme_void()
+
+baltimore_income_sf <- "G:/My Drive/GES 486/FinalProject/data/baltimore_median_income.geojson"
+
+
+st_write(baltimore_income_sf, "G:/My Drive/GES 486/FinalProject/data" , driver = "GeoJSON")
+
+
+```
+
+```{r}
+# Load necessary libraries
+library(tidycensus)
+library(sf)
+
+# Retrieve the ACS data with geometry
+baltimore_income <- get_acs(
+  geography = "tract",
+  variables = "B19013_001",
+  state = "MD",
+  county = "Baltimore city",
+  geometry = TRUE,
+  survey = "acs5",
+  year = 2019
+)
+
+# Make baltimore_income is an sf object
+baltimore_income_sf <- st_as_sf(baltimore_income)
+
+# Specify the file path to save the GeoJSON file
+output_path_income_geojson <- "G:/My Drive/GES 486/FinalProject/data/baltimore_median_income.geojson"
+
+# Write the spatial data to a GeoJSON file
+st_write(baltimore_income_sf, output_path_income_geojson, driver = "GeoJSON")
+
+```
+
+```{r}
+baltimore_highschool <- get_acs(geography = "tract",
+                                variables = "B15003_017",
+                                state = "MD",
+                                county = "Baltimore city",
+                                geometry = TRUE,
+                                survey = "acs5",
+                                year = 2019)
+
+
+baltimore_highschool_sf <- st_as_sf(baltimore_highschool)
+
+
+ggplot() +
+  geom_sf(data = baltimore_highschool_sf, aes(fill = estimate)) +
+  scale_fill_viridis_c(option = "inferno", direction = -1) +
+  labs(title = "High School Educational Attainment in Baltimore City",
+       fill = "Number of Individuals with High School Diploma",
+       caption = "Source: U.S. Census Bureau",
+       x = "Longitude",
+       y = "Latitude") +
+  theme_void()
+
+```
+
+```{r}
+# Load necessary libraries
+library(tidycensus)
+library(sf)
+
+# Retrieve the ACS data with geometry
+baltimore_highschool <- get_acs(geography = "tract",
+                                variables = "B15003_017",
+                                state = "MD",
+                                county = "Baltimore city",
+                                geometry = TRUE,
+                                survey = "acs5",
+                                year = 2019)
+
+# Ensure baltimore_income is an sf object
+baltimore_highschool_sf <- st_as_sf(baltimore_highschool)
+
+# Specify the file path where you want to save the GeoJSON file
+output_path_income_geojson <- "G:/My Drive/GES 486/FinalProject/data/baltimore_highschool.geojson"
+
+# Write the spatial data to a GeoJSON file
+st_write(baltimore_highschool_sf, output_path_income_geojson, driver = "GeoJSON")
+```
